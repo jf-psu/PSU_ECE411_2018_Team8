@@ -1,4 +1,6 @@
 
+#ECE411 Project
+#Phong Nguyen
 #python read from adruinoData
 
 import serial

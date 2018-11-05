@@ -1,5 +1,6 @@
 
-
+#project ECE411
+#Phong Nguyen
 #include <Wire.h>    // imports the wire library for talking over I2C 
 #include "Adafruit_INA219.h"  // import the Voltage and current Sensor Library
 Adafruit_BMP085 mySensor;  // create sensor object called mySensor

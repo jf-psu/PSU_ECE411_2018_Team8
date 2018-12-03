@@ -1,5 +1,5 @@
 import pdb
-pdb.set_trace()
+#pdb.set_trace()
 import sys
 import serial
 import numpy as np
@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from drawnow import *
 from tkinter import *
 from scipy.interpolate import make_interp_spline, BSpline
+import time
 
 
 #serial object 
@@ -38,11 +39,15 @@ start=0
 def reading_values():
     counter=0
     global start
+    plt.clf()
     if(start==0):
         plt.title('Sensor Voltage and Current through Solar cells')
         plt.grid(True)
-        plt.ylabel('Sensor Voltage V')
+        plt.ylabel('Values')
         plt.legend(loc='upper left')
+        axes = plt.gca()
+        axes.set_xlim([0,250])
+        axes.set_ylim([0,50])
         start=1
     while counter!=250:
         arduinoString = ser.readline()
@@ -55,21 +60,25 @@ def reading_values():
             Ii.append(I)
             print(dataArray)
             counter = counter +1
-            print(counter)
             
-    x=range(250)
-    #s = UnivariateSpline(x,Vv,s=3)
-    xnew=np.linspace(0,250,100)
-    spl=make_interp_spline(Vv,Ii,k=3)
-    
-    Vsmooth=spl(xnew)
-    plt.plot(xnew,Vsmooth,label='Voltage V')
-    #plt.plot(Vv, 'b^-', label='Voltage V')   #READ DOT AND LINE
-  
+    #x=range(250)
+    #xnew=np.linspace(0,250,100)
+    #spl=make_interp_spline(Vv,Ii,k=3)
+    #Vsmooth=spl(xnew)
+    plt.xlabel('samples')
+    #plt.plot(xnew,Vsmooth')
+    plt.plot(Vv)
+    plt.plot(Ii)
+    plt.legend(['Voltage V', 'Current Amp'])
     plt.show()
+
+
             
          
 def clicked():
+        for i in range(1,5):
+            print('wait for serial port in ',i,'secs') 
+            time.sleep(1)
         print("Button was clicked !!")
         ser.write(str.encode('g'))
         reading_values()
@@ -88,3 +97,4 @@ def GUI():
 
 if __name__ == '__main__':
         GUI()
+#https://stackoverflow.com/questions/43644790/how-to-improve-the-performance-when-2d-interpolating-smoothing-lines-using-scipy

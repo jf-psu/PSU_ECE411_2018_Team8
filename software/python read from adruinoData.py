@@ -109,3 +109,4 @@ if __name__ == '__main__':
         GUI()
 #https://stackoverflow.com/questions/43644790/how-to-improve-the-performance-when-2d-interpolating-smoothing-lines-using-scipy
 #https://stackoverflow.com/questions/46633544/smoothing-out-curve-in-python
+#https://stackoverflow.com/questions/40085300/how-to-smooth-lines-in-a-figure-in-python

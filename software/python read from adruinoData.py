@@ -22,10 +22,6 @@ count = 0
 window = Tk()
 start=0
 
-
-#def my_plot(): 
-    #plt.ylim(,)#y limit
-
     
   # plt2=plt.twinx()
     #plt2.ylim(,)#y limit
@@ -39,8 +35,11 @@ start=0
 def reading_values():
     counter=0
     global start
-    plt.clf()
-    if(start==0):
+
+    plt.clf()                   #clear plot
+    
+   
+    if(start==0):                            #creating plot first run
         plt.title('Sensor Voltage and Current through Solar cells')
         plt.grid(True)
         plt.ylabel('Values')
@@ -49,7 +48,8 @@ def reading_values():
         axes.set_xlim([0,250])
         axes.set_ylim([0,50])
         start=1
-    while counter!=250:
+    
+    while counter!=250:                         #collecting 250 sample data
         arduinoString = ser.readline()
         if(arduinoString):  
             dataArray = arduinoString.split()	#split into array called dataArray
@@ -76,22 +76,30 @@ def reading_values():
 
 
             
-         
-def clicked():
-        for i in range(1,5):
+     
+def clicked():                          #function when clicked    
+        #wait for serial port
+        #without this serial port will get unrespond
+        for i in range(1,5):             #5 seconds
             print('wait for serial port in ',i,'secs') 
             time.sleep(1)
         print("Button was clicked !!")
-        ser.write(str.encode('g'))
+     
+        ser.write(str.encode('g'))             #sending signal
         reading_values()
  
         
-                
+#Button section            
 def GUI():
+        #create window
         window.title("Measure Voltage and Current from Solar Pannel")
         window.geometry('900x200')
+        
+        #text in window
         lbl = Label(window, text="Press button to start Measuring Voltage and Current of Solar Pannel",font=("Arial Bold", 20))
         lbl.grid(column=0, row=0)
+        
+        #text in button
         btn = Button(window, text="Button", font=("Arial Bold", 30), command=clicked)
         btn.grid(column=0, row=3)
 
@@ -100,3 +108,4 @@ def GUI():
 if __name__ == '__main__':
         GUI()
 #https://stackoverflow.com/questions/43644790/how-to-improve-the-performance-when-2d-interpolating-smoothing-lines-using-scipy
+#https://stackoverflow.com/questions/46633544/smoothing-out-curve-in-python

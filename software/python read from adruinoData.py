@@ -60,13 +60,13 @@ def reading_values():
             Ii.append(I)
             print(dataArray)
             counter = counter +1
-            
+    #CURVE PLOT
     #x=range(250)
     #xnew=np.linspace(0,250,100)
     #spl=make_interp_spline(Vv,Ii,k=3)
     #Vsmooth=spl(xnew)
-    plt.xlabel('samples')
     #plt.plot(xnew,Vsmooth')
+    plt.xlabel('samples')
     plt.plot(Vv)
     plt.plot(Ii)
     plt.legend(['Voltage V', 'Current Amp'])

@@ -66,6 +66,8 @@ def reading_values():
     #spl=make_interp_spline(Vv,Ii,k=3)
     #Vsmooth=spl(xnew)
     #plt.plot(xnew,Vsmooth')
+    
+    #Collected data put to graph
     plt.xlabel('samples')
     plt.plot(Vv)
     plt.plot(Ii)

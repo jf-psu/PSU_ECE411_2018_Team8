@@ -1,11 +1,12 @@
 import pdb
-#pdb.set_trace()
+pdb.set_trace()
 import sys
 import serial
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 from drawnow import *
 from tkinter import *
+from scipy.interpolate import make_interp_spline, BSpline
 
 
 #serial object 
@@ -18,6 +19,7 @@ Ii=[]
 plt.ion() #matplotlib to interactive node mode LIVE DATA
 count = 0
 window = Tk()
+start=0
 
 
 #def my_plot(): 
@@ -35,7 +37,14 @@ window = Tk()
 
 def reading_values():
     counter=0
-    while counter!=255:
+    global start
+    if(start==0):
+        plt.title('Sensor Voltage and Current through Solar cells')
+        plt.grid(True)
+        plt.ylabel('Sensor Voltage V')
+        plt.legend(loc='upper left')
+        start=1
+    while counter!=250:
         arduinoString = ser.readline()
         if(arduinoString):  
             dataArray = arduinoString.split()	#split into array called dataArray
@@ -46,12 +55,17 @@ def reading_values():
             Ii.append(I)
             print(dataArray)
             counter = counter +1
-
-    plt.title('Sensor Voltage and Current through Solar cells')
-    plt.grid(True)
-    plt.ylabel('Sensor Voltage V')
-    plt.plot(Vv, 'b^-', label='Voltage V')   #READ DOT AND LINE
-    plt.legend(loc='upper left')
+            print(counter)
+            
+    x=range(250)
+    #s = UnivariateSpline(x,Vv,s=3)
+    xnew=np.linspace(0,250,100)
+    spl=make_interp_spline(Vv,Ii,k=3)
+    
+    Vsmooth=spl(xnew)
+    plt.plot(xnew,Vsmooth,label='Voltage V')
+    #plt.plot(Vv, 'b^-', label='Voltage V')   #READ DOT AND LINE
+  
     plt.show()
             
          

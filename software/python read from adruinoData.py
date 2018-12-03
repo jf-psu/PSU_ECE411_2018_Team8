@@ -53,3 +53,24 @@ while True:
 		Ii.pop(0)
 		
 #https://www.youtube.com/watch?v=zH0MGNJbenc
+
+
+import sys
+from PyQt5 import QtWidgets
+
+app = QtWidgets.QApplication(sys.argv)
+window = QtWidgets.QWidget()
+num_readings = QtWidgets.QLineEdit()
+button = QtWidgets.QPushButton("GO!")
+
+def run():
+        window.close
+
+button.clicked.connect(run)
+
+layout = QtWidgets.QVBoxLayout()
+layout.addWidget(num_readings)
+layout.addWidget(button)
+window.setLayout(layout)
+window.show()
+sys.exit(app.exec_())

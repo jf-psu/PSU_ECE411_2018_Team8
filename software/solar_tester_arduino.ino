@@ -6,7 +6,7 @@ Adafruit_INA219 mySensor;  // create sensor object called mySensor
 
 int LOAD_PIN = 11; // PB7
 int LOAD_V_SENSE_PIN = 8; // PB4
-#define AVG_COUNT 30
+#define AVG_COUNT 5
 float V;  // Variable for holding temp in V
 float I;  // Variable for holding temp in I
 float P;
@@ -66,7 +66,7 @@ void read_sensor_loop()
 void do_iv_trace()
 {
   int pwm_step, average_step;
-  
+  /*
   Serial.println("Starting I-V trace");
   // print column header
   Serial.print("PWM_Value");
@@ -74,12 +74,12 @@ void do_iv_trace()
   Serial.print("Voltage");
   Serial.print(" ");
   Serial.println("Current");
-      
+  */    
   for (pwm_step = 0; pwm_step <= 255; pwm_step++)
   {
     //V = mySensor.getShuntVoltage_mV();
     set_load(pwm_step);
-    delay(100 * ms_scaler);
+    delay(10 * ms_scaler);
     float i_avg = 0, v_avg = 0, v_shunt = 0;
     int load_v_avg = 0;
     
@@ -95,7 +95,7 @@ void do_iv_trace()
       v_avg += V;
       load_v_avg += analogRead(LOAD_V_SENSE_PIN);
       
-      delay(10 * ms_scaler);
+      delay(1 * ms_scaler);
 //      Serial.println(v_shunt);
 /*
       Serial.print('D'); // mark this as debug data
@@ -124,7 +124,7 @@ void do_iv_trace()
   //Serial.println(P);
   //delay(250*ms_scaler); //Pause between readings.
   set_load(0);
-  Serial.println("Trace complete");
+  //Serial.println("Trace complete");
 }
 
 

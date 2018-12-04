@@ -4,35 +4,56 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtGui  # (the example applies equally well to PySide)
 import pyqtgraph as pg
 import time
+import serial
 
 def collect_trace():
-  trace_btn.setEnabled(False)
-  app.setOverrideCursor(Qt.WaitCursor)
-  print('Starting trace')
-  voltage = []
-  current = []
-  power = []
+    trace_btn.setEnabled(False)
+    app.setOverrideCursor(Qt.WaitCursor)
 
+    print('Starting trace')
 
-  for i in range(0, 5):
-      voltage.append(i)
-      current.append(.5*(i*i))
-      power.append(.5 * pow(i, 3))
+    com_port = 'COM5'
 
-      time.sleep(.5)
+    print('Opening serial port %s' % com_port)
+    ser = serial.Serial(com_port, 115200)
+    ser.flush()
+    print('Sending (G)O command')
+    ser.write('G'.encode())
 
-      #curve = plot.getPlotItem().plot()
-      #plot.plot(x=voltage, y=current, clear=True, pen='b', symbol='o', symbolPen='b', symbolBrush=0.5, name='I-V')
-      #plot.plot(x=voltage, y=power, pen='r', fillLevel=0, fillBrush=(255,255,255,30), name='Power')
+    print('Collecting I-V trace')
+    print('PWM_Value Voltage Current Bias_Voltage')
 
-      iv_curve.setData(x=voltage, y=current)
-      power_curve.setData(x=voltage, y=power)
-      #plot.plot(x=voltage, y=power, pen='r', fillLevel=0, fillBrush=(255,255,255,30), name='Power')
+    voltage = []
+    current = []
+    power = []
 
-      #plot.setData(x=data_x, y=data_y)#, clear=True)
-      app.processEvents()
-  trace_btn.setEnabled(True)
-  app.restoreOverrideCursor()
+    for i in range(0, 256):
+        line = ser.readline()
+        print(line.decode('ascii').strip())
+
+        #PWM_Value Voltage Current Bias_Voltage
+        #0 1.05 0.23 0
+
+        data = line.split()
+        v = float(data[1])
+        c = float(data[2])
+        p = v * c
+
+        voltage.append(v)
+        current.append(c)
+        power.append(p)
+
+        iv_curve.setData(x=voltage, y=current)
+        power_curve.setData(x=voltage, y=power)
+
+        app.processEvents()
+
+    print('Closing serial port')
+    ser.close()
+
+    print('Trace complete')
+    trace_btn.setEnabled(True)
+    app.restoreOverrideCursor()
 
 
 
